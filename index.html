@@ -1,0 +1,2381 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover" />
+  <meta name="theme-color" content="#2ecc71" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="EcoPulse" />
+  <meta name="description" content="EcoPulse - Acompanhe seus hábitos ecológicos" />
+  <title>EcoPulse 🌍</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <link rel="icon" type="image/png" href="icon-192.png" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #07120a;
+      --bg2: #0c1f0f;
+      --card: #0f2412;
+      --card2: #162d19;
+      --txt: #ecf9ec;
+      --txt2: #7ecb8a;
+      --muted: #3d6b47;
+      --green: #27d463;
+      --neon: #3dff6e;
+      --blue: #00d4ff;
+      --yellow: #ffc107;
+      --red: #ff4757;
+      --border: rgba(39, 212, 99, .18);
+      --borderhi: rgba(61, 255, 110, .45);
+      --r: 16px;
+      --rs: 12px;
+      --rxs: 8px;
+      --font: 'Inter', sans-serif;
+      --fhead: 'Orbitron', sans-serif;
+    }
+
+    [data-theme=light] {
+      --bg: #f2faf3;
+      --bg2: #e6f4e9;
+      --card: #fff;
+      --card2: #edf7ef;
+      --txt: #0d2010;
+      --txt2: #1a5c28;
+      --muted: #5a9968;
+      --green: #1db954;
+      --neon: #15a844;
+      --blue: #0099bb;
+      --border: rgba(29, 185, 84, .2);
+      --borderhi: rgba(21, 168, 68, .4);
+    }
+
+    *,
+    ::before,
+    ::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    html,
+    body {
+      height: 100%;
+      overscroll-behavior: none
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--txt);
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
+      transition: background .3s, color .3s
+    }
+
+    .hidden {
+      display: none !important
+    }
+
+    /* SPLASH */
+    #splash {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: radial-gradient(ellipse at 40% 35%, #0a2e10, #030a04 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: .2rem
+    }
+
+    .sp-globe {
+      font-size: 80px;
+      animation: bounce 1.8s ease-in-out infinite;
+      filter: drop-shadow(0 0 30px #27d463)
+    }
+
+    .sp-name {
+      font-family: var(--fhead);
+      font-size: 2.8rem;
+      font-weight: 900;
+      margin: .6rem 0 .1rem;
+      background: linear-gradient(135deg, #3dff6e, #27d463, #00d4ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent
+    }
+
+    .sp-tag {
+      color: #00d4ff;
+      font-size: .8rem;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      opacity: .8
+    }
+
+    .sp-line {
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #3dff6e, transparent);
+      border-radius: 2px;
+      margin-top: 2rem;
+      animation: line-pulse 1.2s ease infinite
+    }
+
+    @keyframes bounce {
+
+      0%,
+      100% {
+        transform: translateY(0)
+      }
+
+      50% {
+        transform: translateY(-10px)
+      }
+    }
+
+    @keyframes line-pulse {
+
+      0%,
+      100% {
+        opacity: .2;
+        transform: scaleX(.4)
+      }
+
+      50% {
+        opacity: 1;
+        transform: scaleX(1)
+      }
+    }
+
+    /* LOGIN */
+    #loginScreen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      position: relative;
+      overflow: hidden;
+      background: radial-gradient(ellipse at 30% 20%, #0c2e12, #030a04 60%), radial-gradient(ellipse at 80% 80%, #002233, transparent 55%)
+    }
+
+    .particles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden
+    }
+
+    .ptc {
+      position: absolute;
+      border-radius: 50%;
+      background: var(--green);
+      animation: ptc-up linear infinite
+    }
+
+    @keyframes ptc-up {
+      0% {
+        transform: translateY(110vh) scale(0);
+        opacity: 0
+      }
+
+      10% {
+        opacity: .2
+      }
+
+      90% {
+        opacity: .2
+      }
+
+      100% {
+        transform: translateY(-80px);
+        opacity: 0
+      }
+    }
+
+    .lbox {
+      background: var(--card);
+      border: 1.5px solid var(--borderhi);
+      border-radius: 24px;
+      padding: 2.2rem 1.8rem;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 0 80px rgba(39, 212, 99, .12), 0 20px 60px rgba(0, 0, 0, .5);
+      animation: slide-up .4s ease;
+      position: relative
+    }
+
+    @keyframes slide-up {
+      from {
+        transform: translateY(20px);
+        opacity: 0
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1
+      }
+    }
+
+    .lhead {
+      text-align: center;
+      margin-bottom: 1.6rem
+    }
+
+    .lglobe {
+      font-size: 2.5rem;
+      display: block;
+      filter: drop-shadow(0 0 12px var(--green));
+      margin-bottom: .5rem
+    }
+
+    .ltitle {
+      font-family: var(--fhead);
+      font-size: 1.8rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--neon), var(--green), var(--blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent
+    }
+
+    .lsub {
+      color: var(--muted);
+      font-size: .75rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      margin-top: .3rem
+    }
+
+    .tabs {
+      display: flex;
+      background: var(--card2);
+      border-radius: var(--rxs);
+      padding: .2rem;
+      gap: .2rem;
+      margin-bottom: 1.3rem
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: .6rem;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-family: var(--font);
+      font-size: .88rem;
+      font-weight: 600;
+      border-radius: 6px;
+      transition: all .25s;
+      cursor: pointer
+    }
+
+    .tab-btn.on {
+      background: var(--green);
+      color: #000
+    }
+
+    .field {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      background: rgba(39, 212, 99, .07);
+      border: 1.5px solid var(--border);
+      border-radius: var(--rxs);
+      padding: .72rem .9rem;
+      margin-bottom: .8rem;
+      transition: border-color .2s
+    }
+
+    .field:focus-within {
+      border-color: var(--green)
+    }
+
+    .field-ic {
+      font-size: .95rem;
+      flex-shrink: 0
+    }
+
+    .field input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      color: var(--txt);
+      font-family: var(--font);
+      font-size: .93rem;
+      outline: none
+    }
+
+    .field input::placeholder {
+      color: var(--muted)
+    }
+
+    .btn-main {
+      width: 100%;
+      padding: .85rem;
+      border: none;
+      border-radius: var(--rs);
+      background: linear-gradient(135deg, var(--green), #1db954);
+      color: #000;
+      font-family: var(--fhead);
+      font-size: .85rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      transition: all .2s;
+      cursor: pointer;
+      margin-top: .3rem
+    }
+
+    .btn-main:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(39, 212, 99, .4)
+    }
+
+    .err {
+      background: rgba(255, 71, 87, .12);
+      border: 1px solid rgba(255, 71, 87, .35);
+      color: var(--red);
+      border-radius: var(--rxs);
+      padding: .55rem .9rem;
+      font-size: .83rem;
+      margin-bottom: .8rem;
+      text-align: center
+    }
+
+    .suc {
+      background: rgba(39, 212, 99, .12);
+      border: 1px solid rgba(39, 212, 99, .35);
+      color: var(--green);
+      border-radius: var(--rxs);
+      padding: .55rem .9rem;
+      font-size: .83rem;
+      margin-bottom: .8rem;
+      text-align: center
+    }
+
+    /* APP */
+    #app {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      gap: .7rem;
+      padding: .65rem 1rem;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(16px)
+    }
+
+    .tb-brand {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      flex-shrink: 0
+    }
+
+    .tb-globe {
+      font-size: 1.5rem;
+      filter: drop-shadow(0 0 6px var(--green))
+    }
+
+    .tb-name {
+      font-family: var(--fhead);
+      font-size: .95rem;
+      font-weight: 900;
+      color: var(--txt)
+    }
+
+    .tb-name span {
+      color: var(--blue)
+    }
+
+    .tb-tag {
+      font-size: .48rem;
+      color: var(--muted);
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      display: block
+    }
+
+    .tb-sep {
+      width: 1px;
+      height: 24px;
+      background: var(--border)
+    }
+
+    .tb-space {
+      flex: 1
+    }
+
+    .tb-right {
+      display: flex;
+      align-items: center;
+      gap: .35rem
+    }
+
+    .ic-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      background: var(--card2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all .2s;
+      color: var(--txt)
+    }
+
+    .ic-btn:hover {
+      border-color: var(--green)
+    }
+
+    .av-sm {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid var(--green);
+      background: var(--card2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: .85rem;
+      font-weight: 700;
+      color: var(--green);
+      font-family: var(--fhead);
+      overflow: hidden;
+      background-size: cover;
+      background-position: center;
+      cursor: pointer;
+      flex-shrink: 0
+    }
+
+    .main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem 1rem 5.5rem
+    }
+
+    .page {
+      display: none;
+      animation: pg-in .28s ease
+    }
+
+    .page.on {
+      display: block
+    }
+
+    @keyframes pg-in {
+      from {
+        opacity: 0;
+        transform: translateY(8px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    /* BOTTOM NAV */
+    .nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 200;
+      display: flex;
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: .38rem .4rem calc(.38rem + env(safe-area-inset-bottom));
+      backdrop-filter: blur(16px)
+    }
+
+    .nb {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .1rem;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      padding: .28rem .1rem;
+      border-radius: var(--rxs);
+      transition: all .2s;
+      cursor: pointer
+    }
+
+    .nb.on {
+      color: var(--green)
+    }
+
+    .nb.on .ni {
+      filter: drop-shadow(0 0 5px var(--green));
+      transform: translateY(-2px)
+    }
+
+    .ni {
+      font-size: 1.25rem;
+      transition: transform .2s
+    }
+
+    .nl {
+      font-size: .5rem;
+      font-weight: 600;
+      letter-spacing: .04em;
+      text-transform: uppercase
+    }
+
+    /* COMPONENTS */
+    .ph {
+      margin-bottom: 1.1rem
+    }
+
+    .ph h1 {
+      font-family: var(--fhead);
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: .15rem
+    }
+
+    .ph p {
+      color: var(--muted);
+      font-size: .78rem
+    }
+
+    .card {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r);
+      padding: 1.1rem;
+      margin-bottom: .8rem
+    }
+
+    .ch {
+      font-weight: 700;
+      font-size: .78rem;
+      color: var(--green);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: .8rem;
+      display: flex;
+      align-items: center;
+      gap: .4rem
+    }
+
+    .g2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .65rem;
+      margin-bottom: .8rem
+    }
+
+    .scard {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r);
+      padding: .9rem .7rem;
+      text-align: center;
+      transition: all .2s
+    }
+
+    .scard:hover {
+      transform: translateY(-2px);
+      border-color: rgba(39, 212, 99, .4)
+    }
+
+    .scard.hi {
+      border-color: rgba(39, 212, 99, .45);
+      box-shadow: 0 0 18px rgba(39, 212, 99, .2)
+    }
+
+    .scard.hiB {
+      border-color: rgba(0, 212, 255, .35);
+      box-shadow: 0 0 18px rgba(0, 212, 255, .15)
+    }
+
+    .sico {
+      font-size: 1.55rem;
+      margin-bottom: .3rem
+    }
+
+    .sval {
+      font-family: var(--fhead);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--green)
+    }
+
+    .slbl {
+      font-size: .65rem;
+      color: var(--muted);
+      margin-top: .15rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .04em
+    }
+
+    .quote {
+      border-left: 3px solid var(--green);
+      padding: .6rem 1rem;
+      background: rgba(39, 212, 99, .05);
+      border-radius: 0 var(--rxs) var(--rxs) 0;
+      color: var(--txt2);
+      font-size: .9rem;
+      line-height: 1.65;
+      font-style: italic
+    }
+
+    /* WEEK CHART */
+    .wchart {
+      display: flex;
+      align-items: flex-end;
+      gap: .35rem;
+      height: 88px;
+      padding: .4rem 0
+    }
+
+    .wb-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .22rem;
+      min-width: 0
+    }
+
+    .wb {
+      width: 100%;
+      border-radius: 4px 4px 0 0;
+      background: linear-gradient(to top, var(--green), var(--neon));
+      min-height: 4px;
+      transition: height .5s
+    }
+
+    .wb.t {
+      box-shadow: 0 0 10px var(--neon)
+    }
+
+    .wb-v {
+      font-size: .58rem;
+      color: var(--muted);
+      max-width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis
+    }
+
+    .wb-d {
+      font-size: .56rem;
+      color: var(--muted);
+      font-weight: 600;
+      max-width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis
+    }
+
+    /* CHECKLIST */
+    .cli {
+      display: flex;
+      align-items: center;
+      gap: .7rem;
+      padding: .82rem .9rem;
+      background: var(--card2);
+      border: 1.5px solid var(--border);
+      border-radius: var(--rs);
+      cursor: pointer;
+      transition: all .2s;
+      user-select: none;
+      margin-bottom: .45rem
+    }
+
+    .cli:hover {
+      border-color: var(--green)
+    }
+
+    .cli.done {
+      border-color: rgba(39, 212, 99, .5);
+      background: rgba(39, 212, 99, .07)
+    }
+
+    .cli.done .cl-txt {
+      text-decoration: line-through;
+      color: var(--muted)
+    }
+
+    .cl-box {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      border: 2px solid var(--muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all .2s;
+      font-size: .75rem
+    }
+
+    .cli.done .cl-box {
+      background: var(--green);
+      border-color: var(--green);
+      color: #000
+    }
+
+    .cl-ico {
+      font-size: 1.1rem;
+      flex-shrink: 0
+    }
+
+    .cl-txt {
+      flex: 1;
+      font-size: .9rem
+    }
+
+    .cl-xp {
+      font-size: .7rem;
+      color: var(--yellow);
+      font-weight: 700;
+      flex-shrink: 0
+    }
+
+    .cl-sum {
+      text-align: center;
+      padding: .75rem;
+      background: var(--card2);
+      border-radius: var(--rxs);
+      color: var(--txt2);
+      font-size: .86rem;
+      margin-top: .5rem
+    }
+
+    /* ACTIONS */
+    .agrid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .6rem;
+      margin-bottom: .9rem
+    }
+
+    .abtn {
+      padding: .9rem .6rem;
+      border: 1.5px solid var(--border);
+      border-radius: var(--rs);
+      background: var(--card2);
+      text-align: center;
+      transition: all .2s;
+      cursor: pointer;
+      color: var(--txt)
+    }
+
+    .abtn:hover {
+      border-color: var(--green);
+      background: rgba(39, 212, 99, .08);
+      transform: translateY(-2px)
+    }
+
+    .a-ico {
+      font-size: 1.9rem;
+      display: block;
+      margin-bottom: .35rem
+    }
+
+    .a-name {
+      font-size: .78rem;
+      font-weight: 600;
+      margin-bottom: .2rem
+    }
+
+    .a-xp {
+      font-size: .68rem;
+      color: var(--yellow);
+      font-weight: 700
+    }
+
+    .alog {
+      display: flex;
+      flex-direction: column;
+      gap: .42rem
+    }
+
+    .act-tools {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: .75rem
+    }
+
+    .arow {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      padding: .62rem .8rem;
+      background: var(--card2);
+      border: 1.5px solid var(--border);
+      border-radius: var(--rxs);
+      animation: sl-in .3s ease
+    }
+
+    @keyframes sl-in {
+      from {
+        transform: translateX(-14px);
+        opacity: 0
+      }
+
+      to {
+        transform: translateX(0);
+        opacity: 1
+      }
+    }
+
+    .arow-name {
+      flex: 1;
+      min-width: 0;
+      font-size: .85rem;
+      line-height: 1.35;
+      word-break: break-word
+    }
+
+    .arow-xp {
+      margin-left: auto;
+      color: var(--yellow);
+      font-size: .76rem;
+      font-weight: 700
+    }
+
+    .adel {
+      margin-left: .45rem;
+      border: 1px solid rgba(255, 71, 87, .28);
+      background: rgba(255, 71, 87, .08);
+      color: #ff8f98;
+      font-size: .72rem;
+      font-weight: 700;
+      padding: .34rem .58rem;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all .2s
+    }
+
+    .adel:hover {
+      color: #fff;
+      border-color: var(--red);
+      background: rgba(255, 71, 87, .18)
+    }
+
+    .act-note {
+      margin-bottom: .8rem;
+      padding: .75rem .9rem;
+      background: rgba(255, 193, 7, .08);
+      border: 1px solid rgba(255, 193, 7, .28);
+      border-radius: var(--rxs);
+      font-size: .8rem;
+      line-height: 1.5;
+      color: #ffd86b
+    }
+
+    .act-note b {
+      color: #fff2b3
+    }
+
+    /* QUIZ */
+    .qz-done {
+      text-align: center;
+      padding: 1.8rem 1rem
+    }
+
+    .qz-done-ic {
+      font-size: 3.5rem;
+      margin-bottom: .5rem
+    }
+
+    .qz-prog {
+      font-size: .76rem;
+      color: var(--muted);
+      margin-bottom: .55rem
+    }
+
+    .qz-q {
+      font-size: 1.05rem;
+      font-weight: 600;
+      line-height: 1.55;
+      color: var(--txt);
+      margin-bottom: 1rem
+    }
+
+    .qz-opts {
+      display: flex;
+      flex-direction: column;
+      gap: .48rem
+    }
+
+    .qz-opt {
+      padding: .78rem 1rem;
+      background: var(--card2);
+      border: 1.5px solid var(--border);
+      border-radius: var(--rxs);
+      text-align: left;
+      font-size: .87rem;
+      color: var(--txt);
+      transition: all .2s;
+      cursor: pointer
+    }
+
+    .qz-opt:hover {
+      border-color: var(--blue);
+      background: rgba(0, 212, 255, .06)
+    }
+
+    .qz-opt.ok {
+      background: rgba(39, 212, 99, .15);
+      border-color: var(--green);
+      color: var(--green);
+      pointer-events: none
+    }
+
+    .qz-opt.no {
+      background: rgba(255, 71, 87, .12);
+      border-color: var(--red);
+      color: var(--red);
+      pointer-events: none
+    }
+
+    .qz-opt.off {
+      pointer-events: none;
+      opacity: .6
+    }
+
+    .qz-fb {
+      margin-top: .85rem;
+      padding: .7rem .9rem;
+      border-radius: var(--rxs);
+      font-size: .86rem;
+      line-height: 1.5
+    }
+
+    .qz-fb.ok {
+      background: rgba(39, 212, 99, .1);
+      border-left: 3px solid var(--green);
+      color: var(--txt2)
+    }
+
+    .qz-fb.no {
+      background: rgba(255, 71, 87, .1);
+      border-left: 3px solid var(--red);
+      color: #ff9aa3
+    }
+
+    .qz-nxt {
+      margin-top: .85rem;
+      width: 100%;
+      padding: .75rem;
+      background: var(--blue);
+      border: none;
+      border-radius: var(--rxs);
+      color: #000;
+      font-family: var(--fhead);
+      font-size: .8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all .2s
+    }
+
+    .qz-nxt:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px)
+    }
+
+    .qz-score {
+      font-family: var(--fhead);
+      font-size: 3rem;
+      color: var(--green);
+      margin: .4rem 0
+    }
+
+    /* IA */
+    .ia-tabs {
+      display: flex;
+      background: var(--card2);
+      border-radius: var(--rxs);
+      padding: .2rem;
+      gap: .2rem;
+      margin-bottom: 1rem
+    }
+
+    .ia-tab {
+      flex: 1;
+      padding: .58rem;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-size: .82rem;
+      font-weight: 600;
+      border-radius: 6px;
+      transition: all .25s;
+      cursor: pointer
+    }
+
+    .ia-tab.on {
+      background: var(--green);
+      color: #000
+    }
+
+    .ia-row {
+      display: flex;
+      gap: .5rem;
+      margin-bottom: .85rem
+    }
+
+    .ia-row input {
+      flex: 1;
+      padding: .75rem .9rem;
+      background: rgba(39, 212, 99, .07);
+      border: 1.5px solid var(--border);
+      border-radius: var(--rxs);
+      color: var(--txt);
+      font-family: var(--font);
+      font-size: .9rem;
+      outline: none;
+      transition: border-color .2s
+    }
+
+    .ia-row input:focus {
+      border-color: var(--green)
+    }
+
+    .ia-row .btn-main {
+      width: auto;
+      margin: 0;
+      padding: .75rem 1rem;
+      font-size: .8rem;
+      white-space: nowrap
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .38rem;
+      margin-top: .5rem
+    }
+
+    .chip {
+      padding: .33rem .72rem;
+      background: rgba(39, 212, 99, .07);
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      font-size: .76rem;
+      color: var(--txt2);
+      cursor: pointer;
+      transition: all .2s
+    }
+
+    .chip:hover {
+      border-color: var(--green);
+      color: var(--green)
+    }
+
+    .ia-res {
+      padding: 1.05rem;
+      background: var(--card2);
+      border: 1.5px solid var(--borderhi);
+      border-radius: var(--rs);
+      margin-bottom: .8rem;
+      animation: pg-in .35s ease
+    }
+
+    .ia-rtop {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      margin-bottom: .8rem
+    }
+
+    .ia-rico {
+      font-size: 2rem
+    }
+
+    .ia-rname {
+      font-size: .95rem;
+      font-weight: 700;
+      color: var(--txt)
+    }
+
+    .ia-rtype {
+      font-size: .75rem;
+      color: var(--muted);
+      margin-top: .12rem
+    }
+
+    .ia-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .38rem;
+      padding: .35rem .8rem;
+      border-radius: 20px;
+      font-size: .8rem;
+      font-weight: 700;
+      margin-bottom: .65rem
+    }
+
+    .ia-status {
+      font-size: .83rem;
+      margin-bottom: .65rem
+    }
+
+    .ia-tip {
+      background: rgba(39, 212, 99, .07);
+      border-left: 3px solid var(--green);
+      padding: .58rem .82rem;
+      border-radius: 0 var(--rxs) var(--rxs) 0;
+      font-size: .83rem;
+      color: var(--txt2);
+      line-height: 1.5
+    }
+
+    /* IA PHOTO */
+    .ia-pwrap {
+      display: flex;
+      flex-direction: column;
+      gap: .8rem
+    }
+
+    .ia-drop {
+      border: 2px dashed var(--border);
+      border-radius: var(--r);
+      padding: 2rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all .3s;
+      background: rgba(39, 212, 99, .04)
+    }
+
+    .ia-drop:hover {
+      border-color: var(--green);
+      background: rgba(39, 212, 99, .08)
+    }
+
+    .ia-drop-ic {
+      font-size: 2.6rem;
+      margin-bottom: .45rem
+    }
+
+    .ia-drop-t {
+      font-weight: 600;
+      color: var(--txt);
+      margin-bottom: .22rem;
+      font-size: .92rem
+    }
+
+    .ia-drop-s {
+      font-size: .76rem;
+      color: var(--muted)
+    }
+
+    .ia-cam {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      width: 100%;
+      padding: .82rem;
+      background: linear-gradient(135deg, #0f3a1f, var(--green));
+      border: none;
+      border-radius: var(--rs);
+      color: #000;
+      font-family: var(--fhead);
+      font-size: .82rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all .2s
+    }
+
+    .ia-cam:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(39, 212, 99, .35)
+    }
+
+    .ia-prev-img {
+      width: 100%;
+      max-height: 220px;
+      object-fit: contain;
+      border-radius: var(--rs);
+      background: var(--card2);
+      display: block
+    }
+
+    .ia-prev-btns {
+      display: flex;
+      gap: .5rem;
+      margin-top: .55rem
+    }
+
+    .ia-prev-btns .btn-main {
+      margin: 0;
+      font-size: .8rem;
+      padding: .75rem
+    }
+
+    .ia-prev-btns .btn-out {
+      flex-shrink: 0;
+      padding: .75rem 1rem;
+      background: transparent;
+      border: 1.5px solid var(--border);
+      border-radius: var(--rs);
+      color: var(--txt2);
+      font-family: var(--font);
+      font-size: .82rem;
+      cursor: pointer;
+      transition: all .2s
+    }
+
+    .ia-prev-btns .btn-out:hover {
+      border-color: var(--red);
+      color: var(--red)
+    }
+
+    .ia-loading {
+      text-align: center;
+      padding: 1.8rem 1rem;
+      color: var(--txt2)
+    }
+
+    .ia-spin {
+      font-size: 2.5rem;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      margin-bottom: .45rem
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    .ia-pr {
+      background: var(--card2);
+      border: 1.5px solid var(--borderhi);
+      border-radius: var(--r);
+      overflow: hidden;
+      animation: pg-in .4s ease
+    }
+
+    .ia-pr-img {
+      width: 100%;
+      max-height: 190px;
+      object-fit: contain;
+      background: rgba(0, 0, 0, .25);
+      display: block
+    }
+
+    .ia-pr-body {
+      padding: 1.05rem
+    }
+
+    .bins-row {
+      display: flex;
+      gap: .35rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 1rem 0
+    }
+
+    .bin-c {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .18rem;
+      padding: .45rem .35rem;
+      border-radius: var(--rxs);
+      border: 2px solid transparent;
+      min-width: 44px;
+      transition: all .2s
+    }
+
+    .bin-c.match {
+      transform: scale(1.12)
+    }
+
+    .bin-em {
+      font-size: 1.5rem
+    }
+
+    .bin-nm {
+      font-size: .56rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      text-align: center;
+      line-height: 1.2
+    }
+
+    .bin-ar {
+      font-size: .58rem;
+      font-weight: 900
+    }
+
+    .conf-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .28rem;
+      font-size: .7rem;
+      font-weight: 700;
+      padding: .26rem .6rem;
+      border-radius: 20px;
+      border: 1px solid;
+      margin-bottom: .75rem
+    }
+
+    /* HISTORY */
+    .cal {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: .3rem
+    }
+
+    .cal-h {
+      text-align: center;
+      font-size: .58rem;
+      color: var(--muted);
+      font-weight: 700;
+      padding: .22rem 0
+    }
+
+    .cal-d {
+      aspect-ratio: 1;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: .6rem;
+      color: var(--muted)
+    }
+
+    .cal-d.act {
+      background: rgba(39, 212, 99, .2);
+      border-color: var(--green);
+      color: var(--green)
+    }
+
+    .cal-d.td {
+      border-color: var(--blue);
+      box-shadow: 0 0 8px rgba(0, 212, 255, .22)
+    }
+
+    .cal-d.ft {
+      opacity: .22
+    }
+
+    .cal-n {
+      font-weight: 700;
+      font-size: .66rem
+    }
+
+    .cal-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--green);
+      margin-top: 2px
+    }
+
+    .wk-g {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .6rem
+    }
+
+    .wk-i {
+      background: var(--card2);
+      border-radius: var(--rxs);
+      padding: .75rem;
+      text-align: center;
+      border: 1px solid var(--border)
+    }
+
+    .wk-v {
+      font-family: var(--fhead);
+      font-size: 1.1rem;
+      color: var(--green);
+      font-weight: 700
+    }
+
+    .wk-l {
+      font-size: .7rem;
+      color: var(--muted);
+      margin-top: .18rem
+    }
+
+    .rlist {
+      display: flex;
+      flex-direction: column;
+      gap: .48rem
+    }
+
+    .rrow {
+      display: flex;
+      align-items: center;
+      gap: .6rem
+    }
+
+    .rico {
+      font-size: 1.1rem;
+      width: 26px;
+      text-align: center
+    }
+
+    .rnm {
+      flex: 1;
+      min-width: 0;
+      font-size: .85rem;
+      color: var(--txt2);
+      word-break: break-word;
+      line-height: 1.35
+    }
+
+    .rbg {
+      width: 68px;
+      height: 5px;
+      background: var(--card2);
+      border-radius: 3px
+    }
+
+    .rfill {
+      height: 100%;
+      border-radius: 3px;
+      background: linear-gradient(90deg, var(--green), var(--neon))
+    }
+
+    .rct {
+      font-weight: 700;
+      color: var(--green);
+      font-size: .8rem
+    }
+
+    /* PROFILE */
+    .prof-av-wrap {
+      position: relative;
+      display: inline-block;
+      margin-bottom: .9rem
+    }
+
+    .prof-av {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      border: 3px solid var(--green);
+      background: var(--card2);
+      margin: 0 auto;
+      cursor: pointer;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.4rem;
+      box-shadow: 0 0 24px rgba(39, 212, 99, .28);
+      overflow: hidden;
+      font-family: var(--fhead);
+      font-weight: 700;
+      color: var(--green)
+    }
+
+    .prof-av-img {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      border-radius: 50%;
+      display: none
+    }
+
+    .prof-av-img.vis {
+      display: block
+    }
+
+    .prof-av-ed {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, .5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      opacity: 0;
+      transition: opacity .2s
+    }
+
+    .prof-av:hover .prof-av-ed {
+      opacity: 1
+    }
+
+    .prof-nm {
+      font-family: var(--fhead);
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: .38rem
+    }
+
+    .prof-badge {
+      display: inline-block;
+      padding: .27rem .88rem;
+      background: linear-gradient(135deg, var(--green), #1db954);
+      color: #000;
+      border-radius: 20px;
+      font-size: .78rem;
+      font-weight: 700;
+      margin-bottom: .5rem
+    }
+
+    .prof-q {
+      color: var(--muted);
+      font-size: .8rem;
+      font-style: italic
+    }
+
+    .lvl-rows {
+      display: flex;
+      flex-direction: column;
+      gap: .58rem
+    }
+
+    .lvl-row {
+      display: flex;
+      align-items: center;
+      gap: .6rem
+    }
+
+    .lvl-ic {
+      font-size: 1.1rem;
+      width: 24px;
+      text-align: center
+    }
+
+    .lvl-nm {
+      flex: 1;
+      font-size: .82rem;
+      color: var(--txt2)
+    }
+
+    .lvl-nm.cur {
+      color: var(--green);
+      font-weight: 700
+    }
+
+    .lvl-bg {
+      width: 70px;
+      height: 5px;
+      background: var(--card2);
+      border-radius: 3px
+    }
+
+    .lvl-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: linear-gradient(90deg, var(--green), var(--neon))
+    }
+
+    .lvl-xp {
+      font-size: .68rem;
+      color: var(--muted)
+    }
+
+    /* INSTALL CARD */
+    .inst-card {
+      border-radius: var(--r);
+      margin-bottom: .85rem;
+      overflow: hidden;
+      border: 1.5px solid var(--borderhi);
+      background: linear-gradient(135deg, rgba(39, 212, 99, .1), rgba(0, 212, 255, .06))
+    }
+
+    .inst-top {
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+      padding: 1.1rem 1.1rem .7rem
+    }
+
+    .inst-ico {
+      font-size: 2.2rem;
+      filter: drop-shadow(0 0 10px var(--green))
+    }
+
+    .inst-title {
+      font-family: var(--fhead);
+      font-size: .9rem;
+      font-weight: 700;
+      color: var(--txt);
+      margin-bottom: .18rem
+    }
+
+    .inst-sub {
+      font-size: .73rem;
+      color: var(--muted);
+      line-height: 1.4
+    }
+
+    /* BIG GREEN DOWNLOAD BUTTON */
+    .inst-dl-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      margin: .2rem 1.1rem .6rem;
+      padding: 1rem;
+      border: none;
+      border-radius: var(--rs);
+      background: linear-gradient(135deg, #1db954, var(--green));
+      color: #000;
+      font-family: var(--fhead);
+      font-size: .95rem;
+      font-weight: 900;
+      cursor: pointer;
+      transition: all .25s;
+      letter-spacing: .04em;
+      width: calc(100% - 2.2rem);
+      box-shadow: 0 6px 24px rgba(39, 212, 99, .4);
+    }
+
+    .inst-dl-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 32px rgba(39, 212, 99, .5)
+    }
+
+    .inst-dl-btn:active {
+      transform: translateY(0)
+    }
+
+    .inst-sep {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      margin: .2rem 1.1rem .6rem;
+      color: var(--muted);
+      font-size: .73rem
+    }
+
+    .inst-sep::before,
+    .inst-sep::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--border)
+    }
+
+    .inst-pwa-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      margin: 0 1.1rem 1.1rem;
+      padding: .78rem;
+      border: 1.5px solid var(--green);
+      border-radius: var(--rs);
+      background: transparent;
+      color: var(--green);
+      font-family: var(--fhead);
+      font-size: .78rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all .2s;
+      width: calc(100% - 2.2rem);
+    }
+
+    .inst-pwa-btn:hover {
+      background: rgba(39, 212, 99, .1);
+      transform: translateY(-1px)
+    }
+
+    .inst-pwa-btn.installed {
+      opacity: .6;
+      cursor: default;
+      transform: none
+    }
+
+    .inst-status {
+      margin: 0 1.1rem 1rem;
+      padding: .68rem .82rem;
+      border-radius: var(--rxs);
+      background: rgba(0, 212, 255, .08);
+      border: 1px solid rgba(0, 212, 255, .2);
+      font-size: .76rem;
+      line-height: 1.45;
+      color: var(--txt2)
+    }
+
+    .inst-steps {
+      display: none;
+      flex-direction: column;
+      gap: .5rem;
+      padding: 0 1.1rem 1.1rem
+    }
+
+    .inst-step {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--rxs);
+      padding: .72rem .88rem
+    }
+
+    .inst-step-t {
+      font-weight: 700;
+      font-size: .8rem;
+      color: var(--txt);
+      margin-bottom: .22rem
+    }
+
+    .inst-step-d {
+      font-size: .76rem;
+      color: var(--txt2);
+      line-height: 1.55
+    }
+
+    .inst-close {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: var(--rxs);
+      color: var(--muted);
+      padding: .48rem;
+      font-size: .76rem;
+      width: 100%;
+      margin-top: .15rem;
+      cursor: pointer;
+      transition: all .2s
+    }
+
+    .inst-close:hover {
+      border-color: var(--green);
+      color: var(--green)
+    }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 5.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 999;
+      background: var(--card);
+      border: 1.5px solid var(--borderhi);
+      color: var(--txt);
+      padding: .62rem 1.35rem;
+      border-radius: 30px;
+      font-size: .85rem;
+      white-space: nowrap;
+      box-shadow: 0 5px 24px rgba(0, 0, 0, .4);
+      animation: toast-in .3s ease;
+      max-width: 90vw;
+      text-overflow: ellipsis;
+      overflow: hidden
+    }
+
+    @keyframes toast-in {
+      from {
+        transform: translateX(-50%) translateY(14px);
+        opacity: 0
+      }
+
+      to {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1
+      }
+    }
+
+    .empty {
+      text-align: center;
+      padding: 1.8rem 1rem;
+      color: var(--muted)
+    }
+
+    .empty-ic {
+      font-size: 2.6rem;
+      margin-bottom: .45rem
+    }
+
+    ::-webkit-scrollbar {
+      width: 3px
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--muted);
+      border-radius: 2px
+    }
+
+    @media(min-width:560px) {
+
+      .main,
+      .topbar {
+        max-width: 560px;
+        margin-left: auto;
+        margin-right: auto
+      }
+
+      .nav {
+        max-width: 560px;
+        left: 50%;
+        transform: translateX(-50%)
+      }
+
+      .g2 {
+        grid-template-columns: repeat(4, 1fr)
+      }
+
+      .agrid {
+        grid-template-columns: repeat(3, 1fr)
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- SPLASH -->
+  <div id="splash">
+    <div class="sp-globe">🌍</div>
+    <div class="sp-name">EcoPulse</div>
+    <div class="sp-tag">Feel the Earth's Beat</div>
+    <div class="sp-line"></div>
+  </div>
+
+  <!-- LOGIN -->
+  <div id="loginScreen" class="hidden">
+    <div class="particles" id="ptcs"></div>
+    <div class="lbox">
+      <div class="lhead">
+        <span class="lglobe">🌍</span>
+        <div class="ltitle">EcoPulse</div>
+        <div class="lsub">Feel the Earth's Beat</div>
+      </div>
+      <div class="tabs">
+        <button class="tab-btn on" id="tA" onclick="switchTab('login')">Entrar</button>
+        <button class="tab-btn" id="tB" onclick="switchTab('reg')">Criar Conta</button>
+      </div>
+      <div id="fLogin">
+        <div class="field"><span class="field-ic">👤</span><input id="lUser" type="text" placeholder="Nome de usuário"
+            autocomplete="username" /></div>
+        <div class="field"><span class="field-ic">🔒</span><input id="lPass" type="password" placeholder="Senha"
+            autocomplete="current-password" /></div>
+        <div id="lErr" class="err hidden"></div>
+        <button class="btn-main" onclick="doLogin()">Entrar →</button>
+      </div>
+      <div id="fReg" class="hidden">
+        <div class="field"><span class="field-ic">👤</span><input id="rUser" type="text"
+            placeholder="Escolha um nome" /></div>
+        <div class="field"><span class="field-ic">🔒</span><input id="rPass" type="password"
+            placeholder="Crie uma senha" /></div>
+        <div class="field"><span class="field-ic">🔒</span><input id="rPass2" type="password"
+            placeholder="Confirme a senha" /></div>
+        <div id="rErr" class="err hidden"></div>
+        <button class="btn-main" onclick="doRegister()">Criar Conta 🌱</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- APP -->
+  <div id="app" class="hidden">
+    <header class="topbar">
+      <div class="tb-brand">
+        <span class="tb-globe">🌍</span>
+        <div>
+          <div class="tb-name">Eco<span>Pulse</span></div><span class="tb-tag">Feel the Earth's Beat</span>
+        </div>
+      </div>
+      <div class="tb-sep"></div>
+      <div class="tb-space"></div>
+      <div class="tb-right">
+        <button class="ic-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
+        <div class="av-sm" id="topAv" onclick="go('profile')"></div>
+        <button class="ic-btn" onclick="logout()" style="color:var(--red)">🚪</button>
+      </div>
+    </header>
+
+    <main class="main">
+
+      <!-- INÍCIO -->
+      <section id="pgDash" class="page on">
+        <div class="ph">
+          <h1 id="greet">Olá! 🌿</h1>
+          <p id="todayLbl"></p>
+        </div>
+        <div class="g2">
+          <div class="scard hi">
+            <div class="sico">⭐</div>
+            <div class="sval" id="dsXP">0</div>
+            <div class="slbl">Pontos XP</div>
+          </div>
+          <div class="scard hiB">
+            <div class="sico">🔥</div>
+            <div class="sval" id="dsStreak">0</div>
+            <div class="slbl">Dias Seguidos</div>
+          </div>
+          <div class="scard hi">
+            <div class="sico" id="dsLvIc">🌱</div>
+            <div class="sval" id="dsLv">Semente</div>
+            <div class="slbl">Nível</div>
+          </div>
+          <div class="scard hiB">
+            <div class="sico">📅</div>
+            <div class="sval" id="dsDays">0</div>
+            <div class="slbl">Dias Ativos</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="ch">💬 Frase do Dia</div>
+          <div class="quote" id="dailyQ"></div>
+        </div>
+        <div class="card">
+          <div class="ch">📊 Semana Atual</div>
+          <div class="wchart" id="wchart"></div>
+        </div>
+        <div class="card">
+          <div class="ch">✅ Checklist de Hoje</div>
+          <div id="dsCl"></div><button onclick="go('checklist')"
+            style="margin-top:.6rem;padding:.45rem .85rem;background:transparent;border:1.5px solid var(--border);border-radius:var(--rxs);color:var(--txt2);font-size:.78rem;cursor:pointer;transition:all .2s"
+            onmouseover="this.style.borderColor='var(--green)'" onmouseout="this.style.borderColor='var(--border)'">Ver
+            checklist completo →</button>
+        </div>
+        <div class="card">
+          <div class="ch">⚡ Últimas Ações</div>
+          <div id="dsActs"></div><button onclick="go('actions')"
+            style="margin-top:.6rem;padding:.45rem .85rem;background:transparent;border:1.5px solid var(--border);border-radius:var(--rxs);color:var(--txt2);font-size:.78rem;cursor:pointer;transition:all .2s"
+            onmouseover="this.style.borderColor='var(--green)'"
+            onmouseout="this.style.borderColor='var(--border)'">Registrar nova ação →</button>
+        </div>
+      </section>
+
+      <!-- CHECKLIST -->
+      <section id="pgChecklist" class="page">
+        <div class="ph">
+          <h1>✅ Checklist Diário</h1>
+          <p id="clDate"></p>
+        </div>
+        <div class="card">
+          <div class="ch">Marque o que fez hoje</div>
+          <div id="clItems"></div>
+          <div class="cl-sum" id="clSum"></div>
+        </div>
+      </section>
+
+      <!-- AÇÕES -->
+      <section id="pgActions" class="page">
+        <div class="ph">
+          <h1>⚡ Registrar Ação</h1>
+          <p>Toque para registrar e ganhar XP</p>
+        </div>
+        <div class="act-note" id="actNote">Aviso: cada categoria possui <b>limite diário</b> e um pequeno intervalo
+          entre toques para evitar ganho de XP só no clique.</div>
+        <div class="card">
+          <div class="ch">🌿 Categorias</div>
+          <div class="agrid" id="agrid"></div>
+        </div>
+        <div class="card">
+          <div class="ch">📋 Ações de Hoje</div>
+          <div class="act-tools">
+            <button class="adel" type="button" onclick="clearActs()">Excluir tudo</button>
+          </div>
+          <div class="alog" id="alog"></div>
+        </div>
+      </section>
+
+      <!-- QUIZ -->
+      <section id="pgQuiz" class="page">
+        <div class="ph">
+          <h1>🧠 Quiz Ecológico</h1>
+          <p id="quizDt"></p>
+        </div>
+        <div class="card" id="qbox"></div>
+      </section>
+
+      <!-- IA -->
+      <section id="pgIA" class="page">
+        <div class="ph">
+          <h1>🤖 IA Ecológica</h1>
+          <p>Descubra como descartar qualquer objeto</p>
+        </div>
+        <div class="card">
+          <div class="ia-tabs">
+            <button class="ia-tab on" id="iaTT" onclick="switchIA('text')">✏️ Digitar o nome</button>
+          </div>
+          <!-- TEXT -->
+          <div id="iaText">
+            <p style="font-size:.8rem;color:var(--muted);margin-bottom:.7rem">Digite o nome do objeto para saber onde
+              jogar fora:</p>
+            <div class="ia-row">
+              <input id="iaInp" type="text" placeholder="Ex: garrafa pet, pilha, banana..."
+                onkeydown="if(event.key==='Enter')iaGo()" />
+              <button class="btn-main" onclick="iaGo()">Analisar 🔍</button>
+            </div>
+            <div id="iaRes" class="hidden"></div>
+            <div class="ch" style="margin-top:.5rem">Exemplos rápidos:</div>
+            <div class="chips">
+              <span class="chip" onclick="iaQ('garrafa pet')">🍶 garrafa pet</span>
+              <span class="chip" onclick="iaQ('pilha')">🔋 pilha</span>
+              <span class="chip" onclick="iaQ('papelão')">📦 papelão</span>
+              <span class="chip" onclick="iaQ('casca de fruta')">🍌 orgânico</span>
+              <span class="chip" onclick="iaQ('celular velho')">📱 eletrônico</span>
+              <span class="chip" onclick="iaQ('vidro')">🍾 vidro</span>
+              <span class="chip" onclick="iaQ('lata de alumínio')">🥫 lata</span>
+              <span class="chip" onclick="iaQ('remédio')">💊 remédio</span>
+              <span class="chip" onclick="iaQ('óleo de cozinha')">🫙 óleo</span>
+              <span class="chip" onclick="iaQ('isopor')">🧊 isopor</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- HISTÓRICO -->
+      <section id="pgHistory" class="page">
+        <div class="ph">
+          <h1>📈 Histórico</h1>
+        </div>
+        <div class="card">
+          <div class="ch">📅 Calendário</div>
+          <div class="cal" id="calWrap"></div>
+        </div>
+        <div class="card hidden" id="wkCard">
+          <div class="ch">📊 Esta Semana</div>
+          <div class="wk-g" id="wkG"></div>
+        </div>
+        <div class="card">
+          <div class="ch">🏆 Categorias</div>
+          <div class="rlist" id="rlist"></div>
+        </div>
+      </section>
+
+      <!-- PERFIL -->
+      <section id="pgProfile" class="page">
+        <div class="ph">
+          <h1>👤 Meu Perfil</h1>
+        </div>
+
+        <!-- INSTALL CARD -->
+        <div class="inst-card">
+          <div class="inst-top">
+            <div class="inst-ico">🌍</div>
+            <div>
+              <div class="inst-title">Instalar EcoPulse no dispositivo</div>
+              <div class="inst-sub">Use offline como app — sem abrir o navegador</div>
+            </div>
+          </div>
+          <!-- BOTÃO PRINCIPAL: instala via PWA prompt do navegador -->
+          <button class="inst-dl-btn" id="instBtn" onclick="doInstall()">
+            <span id="instIco">📲</span> <span id="instLbl">Instalar App Agora</span>
+          </button>
+          <div class="inst-status" id="instStatus">Verificando se este navegador pode instalar o app...</div>
+          <button class="inst-pwa-btn" id="uninstallBtn" onclick="uninstallApp()">
+            🗑️ Desinstalar / limpar app
+          </button>
+          <div class="inst-sep"><span>não apareceu o botão de instalar?</span></div>
+          <!-- BOTÃO SECUNDÁRIO: mostra instruções manuais -->
+          <button class="inst-pwa-btn" onclick="toggleSteps()">
+            📖 Ver passo a passo para instalar
+          </button>
+          <div class="inst-steps" id="instSteps">
+            <div class="inst-step" id="stAndroid">
+              <div class="inst-step-t">🤖 Android — Chrome</div>
+              <div class="inst-step-d">Menu <b>⋮</b> no canto superior → <b>"Adicionar à tela inicial"</b></div>
+            </div>
+            <div class="inst-step" id="stIOS">
+              <div class="inst-step-t">🍎 iPhone — Safari</div>
+              <div class="inst-step-d">Botão <b>⬆️ Compartilhar</b> → <b>"Adicionar à Tela de Início"</b></div>
+            </div>
+            <div class="inst-step" id="stPC">
+              <div class="inst-step-t">💻 PC — Chrome ou Edge</div>
+              <div class="inst-step-d">Ícone <b>⊕</b> na barra de endereço → <b>"Instalar"</b></div>
+            </div>
+            <button class="inst-close" onclick="toggleSteps()">✕ Fechar</button>
+          </div>
+        </div>
+
+        <!-- AVATAR -->
+        <div class="card" style="text-align:center;padding:1.6rem 1rem 1.2rem">
+          <div class="prof-av-wrap">
+            <div class="prof-av" id="profAv" onclick="document.getElementById('avFile').click()">
+              <div class="prof-av-img" id="profAvImg"></div>
+              <span id="profAvIni"></span>
+              <div class="prof-av-ed">📷</div>
+            </div>
+          </div>
+          <input type="file" id="avFile" accept="image/*" style="display:none" onchange="changeAv(event)" />
+          <div class="prof-nm" id="profNm"></div>
+          <div class="prof-badge" id="profBadge"></div>
+          <div class="prof-q" id="profQ"></div>
+        </div>
+
+        <div class="g2">
+          <div class="scard">
+            <div class="sico">⭐</div>
+            <div class="sval" id="prXP">0</div>
+            <div class="slbl">Pontos XP</div>
+          </div>
+          <div class="scard">
+            <div class="sico">📅</div>
+            <div class="sval" id="prDays">0</div>
+            <div class="slbl">Dias Ativos</div>
+          </div>
+          <div class="scard">
+            <div class="sico">🔥</div>
+            <div class="sval" id="prStreak">0</div>
+            <div class="slbl">Streak</div>
+          </div>
+          <div class="scard">
+            <div class="sico">🧠</div>
+            <div class="sval" id="prQz">0</div>
+            <div class="slbl">Quizzes</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="ch">✏️ Editar Perfil</div>
+          <div class="field"><span class="field-ic">👤</span><input type="text" id="edNm" placeholder="Novo nome" />
+          </div>
+          <div class="field"><span class="field-ic">🔒</span><input type="password" id="edPw"
+              placeholder="Nova senha (vazio = manter)" /></div>
+          <div id="edErr" class="err hidden"></div>
+          <div id="edOk" class="suc hidden"></div>
+          <button class="btn-main" onclick="saveProf()">Salvar ✓</button>
+        </div>
+
+        <div class="card">
+          <div class="ch">🏆 Progressão de Nível</div>
+          <div class="lvl-rows" id="lvlRows"></div>
+        </div>
+      </section>
+
+    </main>
+
+    <nav class="nav">
+      <button class="nb on" data-pg="dash" onclick="go('dash')"><span class="ni">🏠</span><span
+          class="nl">Início</span></button>
+      <button class="nb" data-pg="checklist" onclick="go('checklist')"><span class="ni">✅</span><span
+          class="nl">Checklist</span></button>
+      <button class="nb" data-pg="actions" onclick="go('actions')"><span class="ni">⚡</span><span
+          class="nl">Ações</span></button>
+      <button class="nb" data-pg="quiz" onclick="go('quiz')"><span class="ni">🧠</span><span
+          class="nl">Quiz</span></button>
+      <button class="nb" data-pg="ia" onclick="go('ia')"><span class="ni">🤖</span><span class="nl">IA</span></button>
+      <button class="nb" data-pg="history" onclick="go('history')"><span class="ni">📈</span><span
+          class="nl">Histórico</span></button>
+      <button class="nb" data-pg="profile" onclick="go('profile')"><span class="ni">👤</span><span
+          class="nl">Perfil</span></button>
+    </nav>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <script>
+    // ══ DATA ══
+    const LVL = [{ n: 'Semente', ic: '🌱', min: 0, max: 100 }, { n: 'Broto', ic: '🌿', min: 100, max: 300 }, { n: 'Árvore', ic: '🌳', min: 300, max: 600 }, { n: 'Floresta', ic: '🌲', min: 600, max: 1000 }, { n: 'Guardião da Terra', ic: '🌍', min: 1000, max: 9999 }];
+    const CL_ITEMS = [{ id: 'rec', lb: 'Reciclei lixo hoje', ic: '♻️', xp: 15 }, { id: 'agua', lb: 'Economizei água', ic: '💧', xp: 10 }, { id: 'bike', lb: 'Usei bicicleta', ic: '🚲', xp: 20 }, { id: 'plas', lb: 'Evitei plástico descartável', ic: '🚫', xp: 15 }, { id: 'luz', lb: 'Desliguei luzes ao sair', ic: '💡', xp: 10 }, { id: 'reuse', lb: 'Reutilizei algum item', ic: '🔄', xp: 12 }];
+    const ACTS = [{ id: 'rec', lb: 'Reciclagem', ic: '♻️', xp: 20 }, { id: 'agua', lb: 'Economia de Água', ic: '💧', xp: 15 }, { id: 'energia', lb: 'Economia de Energia', ic: '⚡', xp: 15 }, { id: 'transp', lb: 'Transporte Sustentável', ic: '🚌', xp: 25 }, { id: 'arvore', lb: 'Plantar Árvore', ic: '🌳', xp: 50 }, { id: 'consumo', lb: 'Consumo Consciente', ic: '🛒', xp: 18 }];
+    const QUOTES = ['A Terra não é herança dos pais — é empréstimo dos filhos. 🌱', 'Pequenas ações diárias constroem um futuro enorme. 💚', 'Cuide do planeta. É o único que temos. 🌍', 'Sustentabilidade não é opção — é necessidade. 🔑', 'Seja a mudança que quer ver no mundo. ✨', 'A natureza não precisa de nós, mas nós precisamos dela. 🌿', 'Reciclar é dar uma segunda vida ao planeta. ♻️', 'Cada gota economizada é um futuro garantido. 💧', 'Plante árvores, colha esperança. 🌳', 'O meio ambiente é nossa casa. Cuide bem dela. 🏡'];
+    const QB = [{ q: 'Qual cor da lixeira para plástico?', o: ['Vermelha', 'Azul', 'Verde', 'Amarela'], a: 3, e: 'Plásticos e metais vão na lixeira AMARELA.' }, { q: 'O que é compostagem?', o: ['Reciclar plástico', 'Decompor orgânicos em adubo', 'Filtrar água', 'Plantar em vasos'], a: 1, e: 'Compostagem transforma restos de comida em adubo natural.' }, { q: 'Uma torneira pingando desperdiça por dia:', o: ['5 litros', '20 litros', '46 litros', '100 litros'], a: 2, e: 'Uma torneira com defeito desperdiça até 46 litros por dia!' }, { q: 'Qual cor da lixeira para papel e papelão?', o: ['Azul', 'Verde', 'Vermelha', 'Amarela'], a: 0, e: 'Papel e papelão vão na lixeira AZUL.' }, { q: 'O que é CO₂?', o: ['Monóxido de carbono', 'Dióxido de carbono', 'Cloro', 'Carbono orgânico'], a: 1, e: 'CO₂ é o principal gás do efeito estufa.' }, { q: 'Qual energia é renovável e limpa?', o: ['Carvão', 'Petróleo', 'Solar', 'Nuclear'], a: 2, e: 'A energia solar é renovável, limpa e inesgotável.' }, { q: 'Uma garrafa PET demora para se decompor:', o: ['10 anos', '50 anos', '100 anos', '450 anos'], a: 3, e: 'Uma garrafa PET pode levar até 450 anos para desaparecer!' }, { q: 'O que é pegada de carbono?', o: ['Rastro de animal', 'Total de emissões de CO₂', 'Tipo de solo', 'Resíduo orgânico'], a: 1, e: 'Pegada de carbono mede toda emissão de gases que você gera.' }, { q: 'Qual cor da lixeira para vidro?', o: ['Azul', 'Amarela', 'Verde', 'Vermelha'], a: 2, e: 'Vidros vão na lixeira VERDE.' }, { q: 'O que mais economiza água em casa?', o: ['Banhos curtos', 'Fechar torneira', 'Reutilizar chuva', 'Tudo acima'], a: 3, e: 'Todas juntas fazem uma diferença enorme!' }, { q: 'Energia fotovoltaica é:', o: ['Energia eólica', 'Solar em eletricidade', 'Das marés', 'Do gás'], a: 1, e: 'Fotovoltaica converte luz solar em eletricidade.' }, { q: 'O que NÃO vai no reciclável comum?', o: ['Jornal', 'Lata', 'Pilha usada', 'Garrafa PET'], a: 2, e: 'Pilhas têm pontos específicos — nunca no lixo comum!' }, { q: 'Menor emissão de CO₂ por passageiro:', o: ['Avião', 'Carro', 'Metrô elétrico', 'Moto'], a: 2, e: 'Metrô elétrico é o campeão em eficiência.' }, { q: 'Lixo orgânico vai em qual lixeira?', o: ['Amarela', 'Azul', 'Marrom', 'Verde'], a: 2, e: 'Restos de comida vão na lixeira MARROM.' }, { q: 'O que é biodiversidade?', o: ['Variedade de seres vivos', 'Tipo de energia verde', 'Solo fértil', 'Técnica de plantio'], a: 0, e: 'Biodiversidade é a riqueza de formas de vida em um ecossistema.' }, { q: 'O que mais reduz o lixo?', o: ['Reciclar', 'Reutilizar', 'Reduzir o consumo', 'Comprar sustentável'], a: 2, e: 'Reduzir na fonte é sempre a melhor solução!' }, { q: 'Um chiclete demora para decompor:', o: ['1 ano', '5 anos', 'Décadas', 'Nunca'], a: 2, e: 'Chicletes têm plástico e levam décadas para decompor.' }, { q: 'O Brasil tem das florestas tropicais do mundo:', o: ['10%', '20%', '30%', '40%'], a: 2, e: 'O Brasil abriga ~30% das florestas tropicais mundiais!' }, { q: 'Material que demora mais para decompor:', o: ['Papel', 'Vidro', 'Plástico', 'Metal'], a: 1, e: 'Vidro pode levar 1 milhão de anos para decompor!' }, { q: 'Os 3Rs da sustentabilidade são:', o: ['Reciclar, Reparar, Reaproveitar', 'Reduzir, Reutilizar, Reciclar', 'Reusar, Reformar, Reciclar', 'Reciclar, Reaproveitar, Reparar'], a: 1, e: 'Reduzir, Reutilizar e Reciclar — nessa ordem de prioridade!' }, { q: 'Onde descartar óleo de cozinha usado?', o: ['Pia', 'Lixo comum', 'Ponto de coleta', 'Vaso sanitário'], a: 2, e: '1 litro de óleo contamina 1 milhão de litros de água!' }, { q: 'Qual lixeira para embalagens de metal?', o: ['Vermelha', 'Amarela', 'Azul', 'Verde'], a: 1, e: 'Metais (latas, alumínio) vão na lixeira AMARELA.' }, { q: 'O que é energia eólica?', o: ['Energia solar', 'Energia do vento', 'Energia da água', 'Energia do gás'], a: 1, e: 'Eólica aproveita a força do vento para gerar eletricidade!' }, { q: 'Remédios vencidos devem ir:', o: ['Lixo comum', 'Pia', 'Farmácia (devolução)', 'Vaso sanitário'], a: 2, e: 'Farmácias são obrigadas a receber medicamentos vencidos!' }, { q: 'Lâmpadas fluorescentes devem ir:', o: ['Lixo comum', 'Reciclável', 'Ponto de coleta', 'Orgânico'], a: 2, e: 'Lâmpadas têm mercúrio — só em pontos específicos!' }];
+    const W = { 'garrafa pet': { tp: 'Plástico', bin: 'Amarela', c: '#f1c40f', em: '🟡', rec: true, tip: 'Amasse antes de descartar para economizar espaço.' }, 'plástico': { tp: 'Plástico', bin: 'Amarela', c: '#f1c40f', em: '🟡', rec: true, tip: 'Verifique o símbolo de reciclagem na embalagem.' }, 'sacola plástica': { tp: 'Plástico', bin: 'Amarela', c: '#f1c40f', em: '🟡', rec: true, tip: 'Prefira sacolas retornáveis no dia a dia.' }, 'isopor': { tp: 'Plástico especial', bin: 'Amarela (verificar)', c: '#f1c40f', em: '🟡', rec: false, tip: 'Nem toda cidade aceita isopor — verifique pontos específicos.' }, 'lata de alumínio': { tp: 'Metal', bin: 'Amarela', c: '#f1c40f', em: '🟡', rec: true, tip: 'Alumínio é 100% reciclável infinitas vezes!' }, 'latinha': { tp: 'Metal', bin: 'Amarela', c: '#f1c40f', em: '🟡', rec: true, tip: 'Amasse a latinha antes do descarte.' }, 'lata': { tp: 'Metal', bin: 'Amarela', c: '#f1c40f', em: '🟡', rec: true, tip: 'Metais são altamente recicláveis!' }, 'papel': { tp: 'Papel', bin: 'Azul', c: '#3498db', em: '🔵', rec: true, tip: 'Mantenha o papel seco — papel molhado não recicla.' }, 'papelão': { tp: 'Papelão', bin: 'Azul', c: '#3498db', em: '🔵', rec: true, tip: 'Desmonte as caixas antes de descartar.' }, 'jornal': { tp: 'Papel', bin: 'Azul', c: '#3498db', em: '🔵', rec: true, tip: 'Jornais e revistas são ótimos para reciclagem!' }, 'vidro': { tp: 'Vidro', bin: 'Verde', c: '#27ae60', em: '🟢', rec: true, tip: 'Vidro recicla infinitas vezes sem perder qualidade!' }, 'garrafa de vidro': { tp: 'Vidro', bin: 'Verde', c: '#27ae60', em: '🟢', rec: true, tip: 'Garrafas retornáveis são ainda mais sustentáveis!' }, 'casca de fruta': { tp: 'Orgânico', bin: 'Marrom', c: '#8b5e3c', em: '🟤', rec: true, tip: 'Orgânicos viram adubo na compostagem!' }, 'banana': { tp: 'Orgânico', bin: 'Marrom', c: '#8b5e3c', em: '🟤', rec: true, tip: 'Cascas são ótimas para compostagem!' }, 'comida': { tp: 'Orgânico', bin: 'Marrom', c: '#8b5e3c', em: '🟤', rec: true, tip: 'Compostagem pode reduzir 60% do lixo doméstico!' }, 'pilha': { tp: 'Resíduo Especial', bin: 'Ponto de Coleta', c: '#9b59b6', em: '🟣', rec: false, tip: 'NUNCA no lixo comum — contém metais pesados tóxicos!' }, 'bateria': { tp: 'Resíduo Especial', bin: 'Ponto de Coleta', c: '#9b59b6', em: '🟣', rec: false, tip: 'Lojas geralmente aceitam baterias para devolução.' }, 'celular velho': { tp: 'Eletrônico', bin: 'Ponto de Coleta', c: '#9b59b6', em: '🟣', rec: false, tip: 'Eletrônicos têm materiais valiosos e tóxicos — recicle!' }, 'celular': { tp: 'Eletrônico', bin: 'Ponto de Coleta', c: '#9b59b6', em: '🟣', rec: false, tip: 'Lojas de telefonia têm pontos de coleta.' }, 'remédio': { tp: 'Resíduo Especial', bin: 'Farmácia', c: '#9b59b6', em: '🟣', rec: false, tip: 'Farmácias são obrigadas a receber medicamentos vencidos.' }, 'medicamento': { tp: 'Resíduo Especial', bin: 'Farmácia', c: '#9b59b6', em: '🟣', rec: false, tip: 'Nunca descarte remédios na pia ou vaso!' }, 'lâmpada': { tp: 'Resíduo Especial', bin: 'Ponto de Coleta', c: '#9b59b6', em: '🟣', rec: false, tip: 'Lâmpadas fluorescentes têm mercúrio!' }, 'óleo de cozinha': { tp: 'Resíduo Especial', bin: 'Ponto de Coleta', c: '#9b59b6', em: '🟣', rec: false, tip: '1 litro de óleo contamina 1 milhão de litros de água!' }, 'oleo': { tp: 'Resíduo Especial', bin: 'Ponto de Coleta', c: '#9b59b6', em: '🟣', rec: false, tip: 'Procure postos de coleta de óleo na sua cidade.' }, 'fralda': { tp: 'Rejeito', bin: 'Lixo Comum', c: '#95a5a6', em: '⚫', rec: false, tip: 'Fraldas descartáveis levam 500 anos para degradar.' }, 'cigarro': { tp: 'Rejeito', bin: 'Lixo Comum', c: '#95a5a6', em: '⚫', rec: false, tip: 'Bitucas são altamente tóxicas para o meio ambiente.' } };
+
+    // ══ STATE ══
+    let CU = null, pwa = null, installed = window.matchMedia('(display-mode:standalone)').matches || navigator.standalone === true, lastActAt = 0;
+    let QS = { qs: [], cur: 0, sc: 0, done: false, started: false, dt: '', ans: false };
+    const ACT_LIMIT_PER_TYPE = 3;
+    const ACT_LIMIT_PER_DAY = 12;
+    const ACT_COOLDOWN_MS = 2500;
+
+    // ══ UTILS ══
+    const $ = id => document.getElementById(id);
+    const ymd = d => {
+      const yr = d.getFullYear();
+      const mo = String(d.getMonth() + 1).padStart(2, '0');
+      const da = String(d.getDate()).padStart(2, '0');
+      return `${yr}-${mo}-${da}`;
+    };
+    const today = () => ymd(new Date());
+    const dn = d => ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'][new Date(d + 'T12:00:00').getDay()];
+    const wd = () => { const t = new Date(), dy = t.getDay(); const m = new Date(t); m.setDate(t.getDate() - ((dy + 6) % 7)); return Array.from({ length: 7 }, (_, i) => { const x = new Date(m); x.setDate(m.getDate() + i); return ymd(x) }) };
+    const fdt = d => new Date(d + 'T12:00:00').toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
+    function toast(msg, dur = 2800) { const t = $('toast'); t.textContent = msg; t.classList.remove('hidden'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.add('hidden'), dur) }
+    const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+    const isInstallBlocked = () => location.protocol === 'file:' || !window.isSecureContext;
+    const norm = s => (s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
+
+    // ══ STORAGE ══
+    const gU = () => JSON.parse(localStorage.getItem('ep_u') || '{}');
+    const sU = u => localStorage.setItem('ep_u', JSON.stringify(u));
+    const gD = u => JSON.parse(localStorage.getItem('ep_d_' + u) || 'null');
+    const sD = (u, d) => localStorage.setItem('ep_d_' + u, JSON.stringify(d));
+    const gSess = () => localStorage.getItem('ep_s');
+    const sSess = u => localStorage.setItem('ep_s', u);
+    const cSess = () => localStorage.removeItem('ep_s');
+    function newD(u) { return { u, nm: u, pw: '', av: '', xp: 0, days: [], streak: 0, lastDay: '', qz: 0, log: {}, cats: { rec: 0, agua: 0, energia: 0, transp: 0, arvore: 0, consumo: 0 } } }
+    function dd(d, dt) { if (!d.log[dt]) d.log[dt] = { cl: {}, acts: [], xp: 0, qDone: false, qSc: 0 }; return d.log[dt] }
+    function getLv(xp) { for (let i = LVL.length - 1; i >= 0; i--)if (xp >= LVL[i].min) return { ...LVL[i], i }; return { ...LVL[0], i: 0 } }
+    function upStreak(d) { const t = today(); const y = new Date(); y.setDate(y.getDate() - 1); const ys = ymd(y); if (d.lastDay === t) return; d.streak = d.lastDay === ys ? (d.streak || 0) + 1 : 1; d.lastDay = t; if (!d.days.includes(t)) d.days.push(t) }
+
+    // ══ AUTH ══
+    function switchTab(t) { const il = t === 'login'; $('fLogin').classList.toggle('hidden', !il); $('fReg').classList.toggle('hidden', il); $('tA').classList.toggle('on', il); $('tB').classList.toggle('on', !il) }
+    function doLogin() { const u = $('lUser').value.trim(), p = $('lPass').value, e = $('lErr'); e.classList.add('hidden'); if (!u || !p) { e.textContent = 'Preencha usuário e senha!'; e.classList.remove('hidden'); return } const us = gU(); if (!us[u]) { e.textContent = 'Usuário não encontrado. Crie uma conta!'; e.classList.remove('hidden'); return } if (us[u] !== p) { e.textContent = 'Senha incorreta.'; e.classList.remove('hidden'); return } sSess(u); startApp(u) }
+    function doRegister() { const u = $('rUser').value.trim(), p1 = $('rPass').value, p2 = $('rPass2').value, e = $('rErr'); e.classList.add('hidden'); if (!u || !p1 || !p2) { e.textContent = 'Preencha todos os campos!'; e.classList.remove('hidden'); return } if (u.length < 3) { e.textContent = 'Nome deve ter pelo menos 3 caracteres.'; e.classList.remove('hidden'); return } if (p1 !== p2) { e.textContent = 'As senhas não coincidem!'; e.classList.remove('hidden'); return } const us = gU(); if (us[u]) { e.textContent = 'Nome já existe!'; e.classList.remove('hidden'); return } us[u] = p1; sU(us); const d = newD(u); d.pw = p1; sD(u, d); sSess(u); startApp(u) }
+    function startApp(u) { let d = gD(u); if (!d) { d = newD(u); d.pw = gU()[u]; sD(u, d) } CU = u; upStreak(d); sD(u, d); $('loginScreen').classList.add('hidden'); $('app').classList.remove('hidden'); updAv(d); go('dash') }
+    function logout() { cSess(); CU = null; $('app').classList.add('hidden'); $('loginScreen').classList.remove('hidden'); $('lUser').value = ''; $('lPass').value = '' }
+
+    // ══ AVATAR ══
+    function updAv(d) { const el = $('topAv'); if (d?.av) { el.style.backgroundImage = `url(${d.av})`; el.style.backgroundSize = 'cover'; el.textContent = '' } else { el.style.backgroundImage = 'none'; el.textContent = (d?.nm || 'U')[0].toUpperCase() } }
+
+    // ══ NAV ══
+    const PG = { dash: 'pgDash', checklist: 'pgChecklist', actions: 'pgActions', quiz: 'pgQuiz', ia: 'pgIA', history: 'pgHistory', profile: 'pgProfile' };
+    function go(pg) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+      const el = $(PG[pg]); if (el) el.classList.add('on');
+      document.querySelectorAll('.nb').forEach(b => b.classList.toggle('on', b.dataset.pg === pg));
+      if (!CU) return; const d = gD(CU);
+      ({ dash: () => renderDash(d), checklist: () => renderCL(d), actions: () => renderActs(d), quiz: () => renderQuiz(d), ia: () => switchIA('text'), history: () => renderHist(d), profile: () => renderProf(d) })[pg]?.()
+    }
+
+    // ══ THEME ══
+    function toggleTheme() { const h = document.documentElement, dk = h.dataset.theme === 'dark'; h.dataset.theme = dk ? 'light' : 'dark'; $('themeBtn').textContent = dk ? '☀️' : '🌙'; localStorage.setItem('ep_t', h.dataset.theme) }
+
+    // ══ DASH ══
+    function renderDash(d) {
+      const t = today(), day = dd(d, t), lv = getLv(d.xp);
+      $('greet').textContent = `Olá, ${d.nm}! 🌿`; $('todayLbl').textContent = fdt(t);
+      $('dsXP').textContent = d.xp; $('dsStreak').textContent = d.streak || 0; $('dsLv').textContent = lv.n; $('dsLvIc').textContent = lv.ic; $('dsDays').textContent = d.days?.length || 0;
+      $('dailyQ').textContent = QUOTES[new Date().getDate() % QUOTES.length];
+      renderWChart(d); renderDsCL(day); renderDsActs(day);
+    }
+    function renderWChart(d) {
+      const wds = wd(), t = today(), mx = Math.max(...wds.map(x => d.log[x]?.xp || 0), 1);
+      $('wchart').innerHTML = wds.map(x => { const xp = d.log[x]?.xp || 0, h = Math.round((xp / mx) * 72) + 4; return `<div class="wb-wrap" title="${dn(x)}: ${xp}xp"><div class="wb${x === t ? ' t' : ''}" style="height:${h}px"></div><div class="wb-v">${xp || ''}</div><div class="wb-d">${dn(x)}</div></div>` }).join('');
+    }
+    function renderDsCL(day) { $('dsCl').innerHTML = CL_ITEMS.map(i => `<div style="display:flex;align-items:center;gap:.5rem;font-size:.83rem;padding:.28rem 0;color:${day.cl[i.id] ? 'var(--green)' : 'var(--muted)'}"><span>${day.cl[i.id] ? '✅' : '⬜'}</span><span>${i.lb}</span></div>`).join('') }
+    function renderDsActs(day) { if (!day.acts.length) { $('dsActs').innerHTML = '<div class="empty"><div class="empty-ic">⚡</div>Nenhuma ação hoje</div>'; return } $('dsActs').innerHTML = day.acts.slice(-3).reverse().map(a => { const t = ACTS.find(x => x.id === a.id); return `<div class="arow"><span>${t?.ic || '🌿'}</span><span class="arow-name">${t?.lb || a.id}</span><span class="arow-xp">+${a.xp}xp</span></div>` }).join('') }
+
+    // ══ CHECKLIST ══
+    function renderCL(d) { const t = today(), day = dd(d, t); $('clDate').textContent = fdt(t); $('clItems').innerHTML = CL_ITEMS.map(i => `<div class="cli${day.cl[i.id] ? ' done' : ''}" onclick="togCL('${i.id}')"><span class="cl-ico">${i.ic}</span><div class="cl-box">${day.cl[i.id] ? '✓' : ''}</div><span class="cl-txt">${i.lb}</span><span class="cl-xp">+${i.xp}xp</span></div>`).join(''); const dn2 = CL_ITEMS.filter(i => day.cl[i.id]).length; $('clSum').textContent = `${dn2} de ${CL_ITEMS.length} itens concluídos hoje 🌱` }
+    function togCL(id) { const d = gD(CU), t = today(), day = dd(d, t), item = CL_ITEMS.find(i => i.id === id); if (day.cl[id]) { day.cl[id] = false; d.xp = Math.max(0, d.xp - item.xp); day.xp = Math.max(0, day.xp - item.xp); toast(`${item.ic} Desmarcado`) } else { day.cl[id] = true; d.xp += item.xp; day.xp += item.xp; toast(`${item.ic} +${item.xp}xp ganho!`) } sD(CU, d); renderCL(d) }
+
+    // ══ ACTIONS ══
+    function renderActs(d) { const t = today(), day = dd(d, t), rem = Math.max(0, ACT_LIMIT_PER_DAY - day.acts.length); $('actNote').innerHTML = `Aviso: cada categoria possui <b>limite diário de ${ACT_LIMIT_PER_TYPE} registros</b>, com até <b>${ACT_LIMIT_PER_DAY} ações no total por dia</b>. Restantes hoje: <b>${rem}</b>.`; $('agrid').innerHTML = ACTS.map(a => { const used = day.acts.filter(x => x.id === a.id).length, blocked = used >= ACT_LIMIT_PER_TYPE || day.acts.length >= ACT_LIMIT_PER_DAY; return `<button class="abtn" onclick="addAct('${a.id}')" ${blocked ? 'disabled' : ''} style="${blocked ? 'opacity:.55;cursor:not-allowed;' : ''}"><span class="a-ico">${a.ic}</span><div class="a-name">${a.lb}</div><div class="a-xp">+${a.xp}xp</div><div style="font-size:.62rem;color:var(--muted);margin-top:.24rem">${used}/${ACT_LIMIT_PER_TYPE} hoje</div></button>` }).join(''); renderAlog(day); const clearBtn = document.querySelector('.act-tools .adel'); if (clearBtn) clearBtn.disabled = !day.acts.length }
+    function renderAlog(day) { const el = $('alog'); if (!day.acts.length) { el.innerHTML = '<div class="empty"><div class="empty-ic">🌿</div>Nenhuma ação registrada hoje</div>'; return } el.innerHTML = day.acts.map((a, i) => { const t = ACTS.find(x => x.id === a.id); return `<div class="arow"><span>${t?.ic || '🌿'}</span><span class="arow-name">${t?.lb || a.id}</span><span class="arow-xp">+${a.xp}xp</span><button class="adel" type="button" aria-label="Excluir ação" onclick="delAct(${i})">Excluir</button></div>` }).join('') }
+    function addAct(id) { const now = Date.now(); if (now - lastActAt < ACT_COOLDOWN_MS) { toast('Espere um instante antes de registrar outra ação.', 2600); return } const d = gD(CU), t = today(), day = dd(d, t), at = ACTS.find(a => a.id === id); if (!at) return; const used = day.acts.filter(x => x.id === id).length; if (day.acts.length >= ACT_LIMIT_PER_DAY) { toast(`Limite diário atingido: ${ACT_LIMIT_PER_DAY} ações hoje.`, 3200); renderActs(d); return } if (used >= ACT_LIMIT_PER_TYPE) { toast(`Você já registrou ${ACT_LIMIT_PER_TYPE}x esta categoria hoje.`, 3200); renderActs(d); return } lastActAt = now; day.acts.push({ id, xp: at.xp }); d.xp += at.xp; day.xp += at.xp; d.cats[id] = (d.cats[id] || 0) + 1; sD(CU, d); toast(`${at.ic} ${at.lb} registrado! +${at.xp}xp`); renderActs(d) }
+    function delAct(i) { const d = gD(CU), t = today(), day = dd(d, t), a = day.acts[i]; if (!a) return; d.xp = Math.max(0, d.xp - a.xp); day.xp = Math.max(0, day.xp - a.xp); d.cats[a.id] = Math.max(0, (d.cats[a.id] || 1) - 1); day.acts.splice(i, 1); sD(CU, d); toast('Ação removida'); renderActs(d) }
+    function clearActs() { const d = gD(CU), t = today(), day = dd(d, t); if (!day.acts.length) return; const ok = confirm('Deseja excluir todas as ações registradas hoje?'); if (!ok) return; day.acts.forEach(a => { d.xp = Math.max(0, d.xp - a.xp); day.xp = Math.max(0, day.xp - a.xp); d.cats[a.id] = Math.max(0, (d.cats[a.id] || 0) - 1) }); day.acts = []; sD(CU, d); toast('Todas as ações de hoje foram removidas'); renderActs(d) }
+
+    // ══ QUIZ ══
+    function rng(a) { return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296 } }
+    function dQuiz() { const seed = parseInt(today().replace(/-/g, '')); return [...QB].sort(() => rng(seed)() - .5).slice(0, 5) }
+    function renderQuiz(d) { const t = today(), day = dd(d, t); $('quizDt').textContent = fdt(t); const box = $('qbox'); if (day.qDone) { box.innerHTML = `<div class="qz-done"><div class="qz-done-ic">🌱</div><h2>Quiz de hoje concluído!</h2><p style="color:var(--muted);margin:.4rem 0;font-size:.9rem">Você acertou <b style="color:var(--green)">${day.qSc}/5</b> perguntas</p><p style="color:var(--muted);font-size:.8rem;margin-top:.4rem">Volte amanhã para um novo quiz 🌿</p></div>`; return } if (!QS.started || QS.dt !== t) { QS = { qs: dQuiz(), cur: 0, sc: 0, done: false, started: true, dt: t, ans: false } } if (QS.done) { renderQRes(box, d); return } renderQQ(box) }
+    function renderQQ(box) { const q = QS.qs[QS.cur], n = QS.cur + 1, tot = QS.qs.length; box.innerHTML = `<div class="qz-prog">Pergunta ${n} de ${tot} • ${QS.sc} acerto${QS.sc !== 1 ? 's' : ''}</div><div class="qz-q">${q.q}</div><div class="qz-opts">${q.o.map((o, i) => `<button class="qz-opt" onclick="ansQ(${i})">${o}</button>`).join('')}</div><div id="qFb"></div><div id="qNxt"></div>` }
+    function ansQ(idx) { if (QS.ans) return; QS.ans = true; const q = QS.qs[QS.cur]; document.querySelectorAll('.qz-opt').forEach((b, i) => { b.classList.add('off'); if (i === q.a) b.classList.add('ok'); else if (i === idx) b.classList.add('no') }); const ok = idx === q.a; if (ok) QS.sc++; $('qFb').innerHTML = `<div class="qz-fb ${ok ? 'ok' : 'no'}">${ok ? '✅ Correto!' : '❌ Incorreto!'} — ${q.e}</div>`; $('qNxt').innerHTML = `<button class="qz-nxt" onclick="nxtQ()">${QS.cur < QS.qs.length - 1 ? 'Próxima →' : 'Ver resultado 🏆'}</button>` }
+    function nxtQ() { QS.cur++; QS.ans = false; if (QS.cur >= QS.qs.length) { QS.done = true; const d = gD(CU), t = today(), day = dd(d, t), bonus = QS.sc * 10; day.qDone = true; day.qSc = QS.sc; day.xp += bonus; d.xp += bonus; d.qz = (d.qz || 0) + 1; sD(CU, d); renderQRes($('qbox'), d) } else renderQQ($('qbox')) }
+    function renderQRes(box, d) { const s = QS.sc, t = QS.qs.length, xp = s * 10, em = s === t ? '🏆' : s >= 3 ? '🌟' : '🌱'; box.innerHTML = `<div class="qz-done"><div class="qz-done-ic">${em}</div><h2>Quiz Concluído!</h2><div class="qz-score">${s}/${t}</div><p style="color:var(--txt2);font-size:.9rem">+${xp}xp ganhos!</p><p style="color:var(--muted);font-size:.8rem;margin-top:.4rem">${s === t ? 'Perfeito! Guardião da natureza!' : s >= 3 ? 'Muito bem! Continue aprendendo!' : 'Não desanime — amanhã você melhora! 🌿'}</p></div>` }
+
+    // ══ IA TEXT ══
+    function switchIA() { $('iaText').classList.remove('hidden'); $('iaTT')?.classList.add('on') }
+    function findW(raw) { const s = norm(raw); if (W[s]) return { ...W[s], key: s }; let best = null, bs = 0; for (const k of Object.keys(W)) { const nk = norm(k); if (s.includes(nk) || nk.includes(s)) { const sc = Math.min(nk.length, s.length) / Math.max(nk.length, s.length); if (sc > bs) { bs = sc; best = k } } } return best ? { ...W[best], key: best } : null }
+    function iaGo() { const raw = $('iaInp').value.trim(); if (!raw) return; const r = findW(raw); const el = $('iaRes'); if (!r) { el.innerHTML = `<div class="ia-res"><div class="ia-rtop"><span class="ia-rico">🤔</span><div><div class="ia-rname">Item não reconhecido</div><div class="ia-rtype">Tente ser mais específico</div></div></div><div class="ia-tip">💡 Procure pontos de coleta especializados ou contate a Prefeitura da sua cidade.</div></div>` } else { el.innerHTML = `<div class="ia-res"><div class="ia-rtop"><span class="ia-rico">${r.rec ? '♻️' : '🗑️'}</span><div><div class="ia-rname">${cap(raw)}</div><div class="ia-rtype">Tipo: ${r.tp}</div></div></div><div class="ia-badge" style="background:${r.c}22;border:1.5px solid ${r.c}66;color:${r.c}">${r.em} Lixeira: <b>${r.bin}</b></div><div class="ia-status">${r.rec ? '✅ <b>Reciclável</b>' : '❌ <b>Não reciclável</b> no lixo comum'}</div><div class="ia-tip">💡 ${r.tip}</div></div>` } el.classList.remove('hidden') }
+    function iaQ(v) { $('iaInp').value = v; iaGo() }
+
+    // ══ HISTORY ══
+    function renderHist(d) { renderCal(d); renderWkSum(d); renderRank(d) }
+    function renderCal(d) { const t = today(), ref = new Date(t + 'T12:00:00'), days = []; for (let i = 34; i >= 0; i--) { const x = new Date(ref); x.setDate(ref.getDate() - i); days.push(ymd(x)) } const hdrs = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom']; let h = hdrs.map(x => `<div class="cal-h">${x}</div>`).join(''); const f = (new Date(days[0] + 'T12:00:00').getDay() + 6) % 7; for (let i = 0; i < f; i++)h += `<div class="cal-d ft"></div>`; h += days.map(x => { const act = d.log[x] && d.log[x].xp > 0, ft = x > t; return `<div class="cal-d${act ? ' act' : ''} ${x === t ? 'td' : ''} ${ft ? 'ft' : ''}" title="${x}"><div class="cal-n">${new Date(x + 'T12:00:00').getDate()}</div>${act ? '<div class="cal-dot"></div>' : ''}</div>` }).join(''); $('calWrap').innerHTML = h }
+    function renderWkSum(d) { const wds = wd(), tXP = wds.reduce((s, x) => s + (d.log[x]?.xp || 0), 0), tA = wds.reduce((s, x) => s + (d.log[x]?.acts?.length || 0), 0), qD = wds.filter(x => d.log[x]?.qDone).length, best = wds.reduce((b, x) => (d.log[x]?.xp || 0) > (d.log[b]?.xp || 0) ? x : b, wds[0]), card = $('wkCard'); if (!tXP) { card.classList.add('hidden'); $('wkG').innerHTML = ''; return } card.classList.remove('hidden'); $('wkG').innerHTML = `<div class="wk-i"><div class="wk-v">${tXP}</div><div class="wk-l">XP esta semana</div></div><div class="wk-i"><div class="wk-v">${tA}</div><div class="wk-l">Ações feitas</div></div><div class="wk-i"><div class="wk-v">${qD}/7</div><div class="wk-l">Quizzes</div></div><div class="wk-i"><div class="wk-v">${dn(best)}</div><div class="wk-l">Melhor dia</div></div>` }
+    function renderRank(d) { const cats = Object.entries(d.cats || {}).sort((a, b) => b[1] - a[1]), mx = Math.max(...cats.map(c => c[1]), 1); if (cats.every(c => c[1] === 0)) { $('rlist').innerHTML = '<div class="empty"><div class="empty-ic">📊</div>Registre ações para ver o ranking</div>'; return } $('rlist').innerHTML = cats.map(([id, ct]) => { const a = ACTS.find(x => x.id === id), pct = Math.round((ct / mx) * 100); return `<div class="rrow"><span class="rico">${a?.ic || '🌿'}</span><span class="rnm">${a?.lb || id}</span><div class="rbg"><div class="rfill" style="width:${pct}%"></div></div><span class="rct">${ct}</span></div>` }).join('') }
+
+    // ══ PROFILE ══
+    function renderProf(d) {
+      const lv = getLv(d.xp);
+      $('profNm').textContent = d.nm || d.u; $('profBadge').textContent = `${lv.ic} ${lv.n}`; $('profQ').textContent = QUOTES[(d.days?.length || 0) % QUOTES.length];
+      $('prXP').textContent = d.xp; $('prDays').textContent = d.days?.length || 0; $('prStreak').textContent = d.streak || 0; $('prQz').textContent = d.qz || 0; $('edNm').value = d.nm || d.u;
+      const img = $('profAvImg'), ini = $('profAvIni');
+      if (d.av) { img.style.backgroundImage = `url(${d.av})`; img.classList.add('vis'); ini.style.display = 'none' } else { img.style.backgroundImage = 'none'; img.classList.remove('vis'); ini.style.display = ''; ini.textContent = (d.nm || 'U')[0].toUpperCase() }
+      $('lvlRows').innerHTML = LVL.map((lv2, i) => { const cur = i === lv.i, pct = cur ? Math.min(100, Math.round(((d.xp - lv2.min) / (lv2.max - lv2.min)) * 100)) : d.xp >= lv2.max ? 100 : 0; return `<div class="lvl-row"><span class="lvl-ic">${lv2.ic}</span><span class="lvl-nm${cur ? ' cur' : ''}">${lv2.n}</span><div class="lvl-bg"><div class="lvl-fill" style="width:${pct}%"></div></div><span class="lvl-xp">${lv2.min}xp</span></div>` }).join('');
+      updInstBtn();
+    }
+    function changeAv(e) { const f = e.target.files[0]; if (!f) return; const rd = new FileReader(); rd.onload = ev => { const d = gD(CU); d.av = ev.target.result; sD(CU, d); updAv(d); renderProf(d); toast('📷 Foto atualizada!') }; rd.readAsDataURL(f) }
+    function saveProf() { const n = $('edNm').value.trim(), p = $('edPw').value, err = $('edErr'), ok = $('edOk'); err.classList.add('hidden'); ok.classList.add('hidden'); if (!n || n.length < 3) { err.textContent = 'Nome deve ter pelo menos 3 caracteres!'; err.classList.remove('hidden'); return } const d = gD(CU); d.nm = n; if (p) { if (p.length < 4) { err.textContent = 'Senha muito curta!'; err.classList.remove('hidden'); return } d.pw = p; const us = gU(); us[CU] = p; sU(us) } sD(CU, d); updAv(d); ok.textContent = '✅ Salvo com sucesso!'; ok.classList.remove('hidden'); toast('✅ Perfil atualizado!'); setTimeout(() => ok.classList.add('hidden'), 3000) }
+
+    // ══ INSTALL ══
+    window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); pwa = e; updInstBtn() });
+    window.addEventListener('appinstalled', () => { installed = true; pwa = null; updInstBtn(); toast('🎉 App instalado com sucesso!', 4000) });
+    function updInstBtn() {
+      const ico = $('instIco'), lbl = $('instLbl'), btn = $('instBtn'), status = $('instStatus'); if (!ico || !lbl || !status) return;
+      btn.disabled = false; btn.style.opacity = '1'; btn.style.cursor = 'pointer';
+      if (installed) { ico.textContent = '✅'; lbl.textContent = 'App já instalado neste dispositivo!'; status.textContent = 'Instalação concluída. O EcoPulse já pode abrir como aplicativo.'; btn.disabled = true; btn.style.opacity = '.7'; btn.style.cursor = 'default' }
+      else if (pwa) { ico.textContent = '📲'; lbl.textContent = 'Instalar App Agora — 1 toque!'; status.textContent = 'Este navegador já liberou a instalação. Toque no botão verde para concluir.' }
+      else if (isInstallBlocked()) { ico.textContent = '⚠️'; lbl.textContent = 'Instalação indisponível neste modo'; status.textContent = 'Abra o projeto em http://localhost ou em HTTPS. Se o app estiver aberto como arquivo local, o navegador bloqueia a instalação do PWA.' }
+      else { ico.textContent = '📲'; lbl.textContent = 'Instalar App Agora'; status.textContent = 'Se o navegador ainda não mostrar o instalador, use o app por alguns instantes e depois tente novamente ou siga o passo a passo manual.' }
+    }
+    async function doInstall() {
+      if (installed) return;
+      if (isInstallBlocked()) { toast('Abra o app em localhost ou HTTPS para permitir a instalação.', 3800); toggleSteps(); return }
+      if (pwa) { pwa.prompt(); const { outcome } = await pwa.userChoice; if (outcome === 'accepted') toast('🌱 Instalando...', 3000); else toast('Instalação cancelada pelo usuário.', 2600); pwa = null; updInstBtn() }
+      else { toast('Use o botão abaixo para ver o passo a passo', 3500); toggleSteps() }
+    }
+    function toggleSteps() { const s = $('instSteps'); s.style.display = s.style.display === 'flex' ? 'none' : 'flex'; const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent), isAnd = /android/i.test(navigator.userAgent); if (s.style.display === 'flex') { $('stAndroid').style.display = isIOS ? 'none' : 'block'; $('stIOS').style.display = isIOS ? 'block' : 'none'; $('stPC').style.display = (isIOS || isAnd) ? 'none' : 'block' } }
+    async function uninstallApp() {
+      const ok = confirm('Deseja limpar os dados locais do EcoPulse neste navegador? Se o app estiver instalado, depois remova-o também pela tela inicial do dispositivo.');
+      if (!ok) return;
+      try {
+        if ('serviceWorker' in navigator) {
+          const regs = await navigator.serviceWorker.getRegistrations();
+          await Promise.all(regs.map(r => r.unregister()));
+        }
+        if ('caches' in window) {
+          const keys = await caches.keys();
+          await Promise.all(keys.map(k => caches.delete(k)));
+        }
+      } catch (err) { }
+      localStorage.removeItem('ep_u');
+      localStorage.removeItem('ep_s');
+      localStorage.removeItem('ep_t');
+      Object.keys(localStorage).filter(k => k.startsWith('ep_d_')).forEach(k => localStorage.removeItem(k));
+      installed = false;
+      pwa = null;
+      CU = null;
+      updInstBtn();
+      toast('Dados locais removidos. Se o ícone do app continuar no aparelho, desinstale pela tela inicial.', 4200);
+      $('app').classList.add('hidden');
+      $('loginScreen').classList.remove('hidden');
+      toggleSteps();
+    }
+
+    // ══ PARTICLES ══
+    function mkPtcs() { const c = $('ptcs'); if (!c) return; for (let i = 0; i < 14; i++) { const p = document.createElement('div'); p.className = 'ptc'; const sz = Math.random() * 7 + 3; p.style.cssText = `width:${sz}px;height:${sz}px;left:${Math.random() * 100}%;animation-duration:${Math.random() * 10 + 8}s;animation-delay:${Math.random() * 10}s`; c.appendChild(p) } }
+
+    // ══ KEYBOARD ══
+    document.addEventListener('keydown', e => { if (e.key !== 'Enter') return; if (!$('fLogin').classList.contains('hidden')) doLogin(); else if (!$('fReg').classList.contains('hidden')) doRegister() });
+
+    // ══ INIT ══
+    (function () {
+      const th = localStorage.getItem('ep_t') || 'dark';
+      document.documentElement.dataset.theme = th; $('themeBtn').textContent = th === 'dark' ? '🌙' : '☀️';
+      mkPtcs();
+      updInstBtn();
+      // Splash
+      const sp = $('splash');
+      setTimeout(() => { sp.style.transition = 'opacity .4s'; sp.style.opacity = '0'; setTimeout(() => { sp.style.display = 'none'; const s = gSess(); if (s && gD(s)) startApp(s); else $('loginScreen').classList.remove('hidden') }, 400) }, 2200);
+      // PWA check
+      if (window.matchMedia('(display-mode:standalone)').matches) installed = true;
+      // SW
+      if ('serviceWorker' in navigator && location.protocol !== 'file:') navigator.serviceWorker.register('sw.js').then(() => updInstBtn()).catch(() => updInstBtn());
+    })();
+  </script>
+</body>
+
+</html>
